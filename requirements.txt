@@ -1,0 +1,10 @@
+numpy
+tensorflow
+scipy
+resampy
+six
+json_tricks
+protobuf
+annoy
+pandas
+json
