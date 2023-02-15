@@ -8,3 +8,5 @@ protobuf
 annoy
 pandas
 json
+escape
+Flask

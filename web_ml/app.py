@@ -10,11 +10,9 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET','POST'])
 def recommend():
-    class_labels = pd.read_csv('/home/julie/Documents/Machine-Learning-II/Music recommandation/spotify-and-youtube-recommenders/web_ml/data/musics/class_labels_indices.csv')
+    class_labels = pd.read_csv('data/musics/class_labels_indices.csv')
     music_dict = dict(zip(class_labels.index, class_labels.display_name))
-    
-    """ Load dataset """
-    with open('/home/julie/Documents/Machine-Learning-II/Music recommandation/spotify-and-youtube-recommenders/web_ml/data/musics/music_set.json', 'r') as file:
+    with open('data/musics/music_set.json', 'r') as file:
         file_read = json.loads(file.read())
         music_dataset = literal_eval(file_read)
     audio_dim = 1280
