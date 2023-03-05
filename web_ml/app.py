@@ -5,11 +5,46 @@ from flask import request, Flask, render_template
 import json
 from ast import literal_eval
 from annoy import AnnoyIndex
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer
+import nltk
+import bs4 as bs
+import urllib.request
+import pandas as pd
+nltk.download('punkt')
 
 app = Flask(__name__)
 
+"""def chatbot_answer(user_query):
+    Measure the cosine similarity and take the second closest index because the first index is the user query
+    user_query
+    
+    cat_data = urllib.request.urlopen('https://simple.wikipedia.org/wiki/Cat').read()
+    cat_data_paragraphs  = bs.BeautifulSoup(cat_data,'lxml').find_all('p')
+    txt = ''
+    for p in cat_data_paragraphs:
+        txt += p.text.lower()
+    sentences = nltk.sent_tokenize(txt)
+    sentences.append(user_query)
+    vectorizer = TfidfVectorizer()
+    sentences_vectors = vectorizer.fit_transform(sentences)
+    
+    vector_values = cosine_similarity(sentences_vectors[-1], sentences_vectors)
+    answer = sentences[vector_values.argsort()[0][-2]]
+    #Final check to make sure there are result present. If all the result are 0, means the text input by us are not captured in the corpus
+    input_check = vector_values.flatten()
+    input_check.sort()
+    
+    if input_check[-2] == 0:
+        return "Please Try again"
+    else: 
+        return answer
+"""
+
 @app.route('/', methods=['GET','POST'])
 def recommend():
+    """ Use the nearest neighbors of the music liked by the user by using ANNOY
+    """
     class_labels = pd.read_csv('data/musics/class_labels_indices.csv')
     music_dict = dict(zip(class_labels.index, class_labels.display_name))
     with open('data/musics/music_set.json', 'r') as file:
@@ -53,6 +88,7 @@ def recommend():
         print(music_input)
         nns_index = annoy_index.get_nns_by_item(19, 10)
         recommends = []
+
         for index in nns_index:
             sample = music_dataset[index]
             music_labels = [music_dict[idx] for idx in sample['label']]
