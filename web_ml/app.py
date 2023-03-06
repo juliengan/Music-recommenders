@@ -1,14 +1,21 @@
+import random
 import pandas as pd
-from flask import request, Flask, render_template
+from flask import jsonify, request, Flask, render_template
 import json
 from ast import literal_eval
 from annoy import AnnoyIndex
 import nltk
 import pandas as pd
+from wit import Wit
 
 nltk.download('punkt')
 
 app = Flask(__name__)
+
+witTOKEN = "ALYL67J3HEMFL3SFQZDHLKO6JZYH7XBK"
+witmodel = Wit( witTOKEN )
+
+messages = []
 
 class_labels = pd.read_csv('data/musics/class_labels_indices.csv')
 music_dict = dict(zip(class_labels.index, class_labels.display_name))
@@ -52,6 +59,62 @@ def recommend(music_input=None):
             if type(ytb_df[index]) != list:
                 recommends.append(ytb_df[index])
         return render_template("request.html", recommends =recommends, musics = musics)
+
+def extract_entity(nlp_data):
+    if nlp_data['entities']: 
+        # get the best entity (movie with highest confidence AND confidence>0.5)
+        entity_list = []
+        currconf = 0.5
+        for entity_body in nlp_data['entities'].values():
+            print(entity_body)
+            if entity_body[0]['confidence'] > currconf:
+                entity_list.append(entity_body[0]['name'])
+
+        return entity_list
+
+
+@app.route('/chat', methods=["POST"])
+def chat():
+    user_input = request.json["user_input"]
+    print(user_input)
+    entities = extract_entity(witmodel.message(user_input))
+    intents = witmodel.message(user_input)['intents']
+    bot_answer = '';
+    if entities:
+        for entitiy in entities:
+            if entitiy == 'hi':
+                hi_res = ["Nice to meet you !", "How you're doing ?", "How's everything?", "Look what the cat dragged in!", "Hey, boo"]
+                bot_answer += random.choice(hi_res)
+            elif entitiy == 'health':
+                health_res = ["I am doing great, thanks for asking.", "Hanging in there, how 'bout you?", "Pretty peachy.", "Not bad for a bot lol !"]
+                bot_answer += random.choice(health_res)
+            elif entitiy == 'health_response':
+                health_res_res = ["That's great to hear !", "You deserve it !"]
+                bot_answer += random.choice(health_res_res)
+            elif entitiy == 'bye':
+                bye_res = ["Farewell", "Catch you later", "Take care", "Goodbye !", "Bye boo !"]
+                bot_answer += random.choice(bye_res)
+            else :
+                bot_answer += "So you want to listen to " + entitiy + " ? Please choose a song below and I will gladly recommand you some good songs"
+    else:
+        bot_answer += "Sorry. I didn't understand. Can you rephrase it please ?"
+        
+    # add user input as message from user
+    messages.append({"sender": "user", "text": user_input})
+    
+    messages.append({"sender": "chatbot", "text": bot_answer})
+    
+    print(messages)
+    return jsonify([{"sender": "chatbot", "text": bot_answer},{"sender": "user", "text": user_input}])
     
 if __name__ == '__main__':
+    text="i want to  listen to  rap"
+    print(text)
+    entities = extract_entity(witmodel.message(text))
+    intents = witmodel.message(text)['intents']
+
+    if intents:
+        if entities:
+            entity = entities
+            print(entity)
     app.run(debug=True)

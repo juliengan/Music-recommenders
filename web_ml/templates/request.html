@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>YoutuBot</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='stylesheets/seasoning_style.css') }}">
     <link rel="shortcut icon" href="/static/youtube.png" type="image/x-icon">
-
 </head>
+
 <body>
     <div class="chatbot-container">
         <div class="chatbot-header">
@@ -20,21 +21,9 @@
                 <p>Hello, I am YoutuBot. How can I help you ?</p>
             </div>
             <div class="chatbot-messages">
-                {% for message in messages %}
-                {% if message["sender"] == "chatbot" %}
-                <div class="chatbot-message">
-                    <img src="{{ url_for('static',filename='images/chatbot-icon.png') }}" alt="Chatbot Icon"
-                        class="chatbot-icon">
-                    <p>{{ message["text"] }}</p>
-                </div>
-                {% else %}
-                <div class="user-message">
-                    <p>{{ message["text"] }}</p>
-                </div>
-                {% endif %}
-                {% endfor %}
+
             </div>
-            <form method="post" action="/">
+            <form method="post" action="/chat" id="chat-form">
                 <div class="user-message">
                     <input type="text" name="user_input" id="user-input" placeholder="Type your message here">
                     <button type="submit" class="user-send-button">Send</button>
@@ -44,13 +33,13 @@
                 <form method="post" action="/">
                     <select name="music_request" id="music" multiple>
                         {% for key, value in musics.items() %}
-                          {% set genres = value|join(', ') %}
-                          <option value="{{ key }}">
+                        {% set genres = value|join(', ') %}
+                        <option id="choose" value="{{ key }}">
                             {{ key }} | Genres: {{ genres }}
-                          </option>
+                        </option>
                         {% endfor %}
-                      </select>
-                    <input type="submit" value="Discover">
+                    </select>
+                    <input id="onboarding_submit" type="submit" value="Discover">
                 </form>
             </div>
             <div class="chatbot-message">
@@ -62,7 +51,51 @@
                 </ul>
             </div>
         </div>
-        </div>
     </div>
+    </div>
+    <script>
+        // Get the form element
+        const form = document.getElementById('chat-form');
+
+        // Add an event listener to the form submission
+        form.addEventListener('submit', (event) => {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+
+            // Get the user input from the form
+            const userInput = document.getElementById('user-input').value;
+            console.log(userInput)
+            // Send an AJAX request to the /chat endpoint with the user input
+            fetch('/chat', {
+                method: 'POST',
+                body: JSON.stringify({ user_input: userInput }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Update the messages on the page
+                    const chatbotMessages = document.querySelector('.chatbot-messages');
+                    for (let d of data) {
+                        const message = d.text;
+                        const sender = d.sender;
+                        chatbotMessages.insertAdjacentHTML('afterbegin', `
+            <div class="${sender}-message">
+                <p>${message}</p>
+            </div>
+        `);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+            // Clear the user input
+            document.getElementById('user-input').value = '';
+        });
+    </script>
 </body>
+
 </html>
