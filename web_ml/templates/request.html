@@ -14,16 +14,29 @@
         </div>
         <div class="chatbot-messages">
             <div class="chatbot-message">
-                <p>Hello, I am YoutuBot.</p>
+                <p>Hello, I am YoutuBot. How can I help you ?</p>
             </div>
-            <div class="chatbot-message">
-                <p>You should try these songs:</p>
-                <ul>
-                    {% for title in recommends %}
-                    <li>{{ title }}</li>
-                    {% endfor %}
-                </ul>
+            <div class="chatbot-messages">
+                {% for message in messages %}
+                {% if message["sender"] == "chatbot" %}
+                <div class="chatbot-message">
+                    <img src="{{ url_for('static',filename='images/chatbot-icon.png') }}" alt="Chatbot Icon"
+                        class="chatbot-icon">
+                    <p>{{ message["text"] }}</p>
+                </div>
+                {% else %}
+                <div class="user-message">
+                    <p>{{ message["text"] }}</p>
+                </div>
+                {% endif %}
+                {% endfor %}
             </div>
+            <form method="post" action="/">
+                <div class="user-message">
+                    <input type="text" name="user_input" id="user-input" placeholder="Type your message here">
+                    <button type="submit" class="user-send-button"><i class="fas fa-paper-plane">Send</i></button>
+                </div>
+            </form>
             <div class="chatbot-input">
                 <form method="post" action="/">
                     <select name="music_request" id="music" multiple>
@@ -34,6 +47,15 @@
                     <input type="submit" value="Discover">
                 </form>
             </div>
+            <div class="chatbot-message">
+                <p>You should try these songs:</p>
+                <ul>
+                    {% for title in recommends %}
+                    <li>{{ title }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
         </div>
     </div>
 </body>
