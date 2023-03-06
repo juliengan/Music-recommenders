@@ -10,7 +10,10 @@
 <body>
     <div class="chatbot-container">
         <div class="chatbot-header">
-            <h1>YoutuBot</h1>
+            <div class="logo">
+                <img src="../static/youtube.png" alt="Your Logo">
+                <h1> YoutuBot </h1>
+            </div>
         </div>
         <div class="chatbot-messages">
             <div class="chatbot-message">
@@ -34,16 +37,19 @@
             <form method="post" action="/">
                 <div class="user-message">
                     <input type="text" name="user_input" id="user-input" placeholder="Type your message here">
-                    <button type="submit" class="user-send-button"><i class="fas fa-paper-plane">Send</i></button>
+                    <button type="submit" class="user-send-button">Send</button>
                 </div>
             </form>
             <div class="chatbot-input">
                 <form method="post" action="/">
                     <select name="music_request" id="music" multiple>
-                        {% for key,value in musics.items() %}
-                        <option value="{{key}}">{{ value }}</option>
+                        {% for key, value in musics.items() %}
+                          {% set genres = value|join(', ') %}
+                          <option value="{{ key }}">
+                            {{ key }} | Genres: {{ genres }}
+                          </option>
                         {% endfor %}
-                    </select>
+                      </select>
                     <input type="submit" value="Discover">
                 </form>
             </div>
