@@ -20,6 +20,7 @@
     <div class="wrapper">
         <header>
             <div class="logo">
+                <img src="../static/youtube coeur.png" alt="Your Logo">
                 <h1> YoutuBot </h1>
             </div>
         </header>
@@ -27,31 +28,29 @@
             <div class="location" id="home">
                 <br>
                 <br>
-                <h2 size="6">Hello, I am YoutuBot.<br></h2>
+                <h2 size="3">Hello, I am YoutuBot 👋🏼</h2>
+                <h3 size="3">Choose the genre you like and I will suggest you music ! 🎧</h3>
                 <form method="post" action="/""">
                     <select name="music_request" id="music" multiple>
-                        {% for key,value in musics.items() %}
-                            <option value="{{key}}">
-                                Music {{ key }} of genres: {{ value }}
-                            </option>
+                        {% for key, value in musics.items() %}
+                          {% set genres = value|join(', ') %}
+                          <option value="{{ key }}">
+                            {{ key }} | Genres: {{ genres }}
+                          </option>
                         {% endfor %}
-                    </select>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+                      </select>
                     <input type="submit" id="onboarding_submit" value="DISCOVER">
-                </form>                
-                <br>
-                <br>
-                <h2 id="people">You should try these songs : </h2>
-                {% if recommends|length > 0 %}
-                <ul>
-                    {% for title in recommends %} 
-                        <li>{{ title }}</li> 
-                    {% endfor %} 
-                </ul>
-                {% endif %}
+                </form>
+                <div id="recommand">
+                    <h2 id="people">You should try these songs : </h2>
+                    {% if recommends|length > 0 %}
+                    <ul>
+                        {% for title in recommends %} 
+                            <li>{{ title }}</li> 
+                        {% endfor %} 
+                    </ul>
+                    {% endif %}
+                </div>
             </div>
             <h4>Do you want to discover something else ?<br><br> </h4>
             <form method="post" action="/""">
