@@ -7,8 +7,8 @@
         integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link href="{{ url_for('static',filename='stylesheets/seasoning_style.css') }}" rel="stylesheet">
 
-    <link rel="shortcut icon" href="/static/icon.png" type="image/x-icon">
-    <title>ANNOY For A Better Listening</title>
+    <link rel="shortcut icon" href="/static/youtube.png" type="image/x-icon">
+    <title>YoutuBot</title>
     <link rel="shortcut icon" href="./static/images/avocado.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"
@@ -29,7 +29,6 @@
                 <br>
                 <h2 size="6">Hello, I am YoutuBot.<br></h2>
                 <form method="post" action="/""">
-                    <p>Choose a music (among the 2070) based on the genres you like:</p>
                     <select name="music_request" id="music" multiple>
                         {% for key,value in musics.items() %}
                             <option value="{{key}}">

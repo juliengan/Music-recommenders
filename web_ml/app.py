@@ -31,6 +31,7 @@ annoy_index.load('../models/nearest_neightbor_graph.ann')
 @app.route('/', methods=["GET", "POST"])
 def recommend(music_input=None):
     """ Use the nearest neighbors of the music liked by the user by using ANNOY. Rule-based chatbot (either recommends music by genre or from a particular artist.)
+    Choose a music (among the 2070) based on the genres you like:
     """
     if request.method == "GET" or request.method == "POST":
         musics = {}
@@ -47,7 +48,8 @@ def recommend(music_input=None):
         nns_index = annoy_index.get_nns_by_item(music_input, 10)
         recommends = []
         for index in nns_index:
-            recommends.append(ytb_df[index])
+            if type(ytb_df[index]) != list:
+                recommends.append(ytb_df[index])
         return render_template("request.html", recommends =recommends, musics = musics)
     
 if __name__ == '__main__':
