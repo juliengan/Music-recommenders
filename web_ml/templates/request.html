@@ -1,65 +1,38 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link href="{{ url_for('static',filename='stylesheets/pretty-checkbox.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
-        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-    <link href="{{ url_for('static',filename='stylesheets/seasoning_style.css') }}" rel="stylesheet">
-
-    <link rel="shortcut icon" href="/static/youtube.png" type="image/x-icon">
+    <meta charset="UTF-8">
     <title>YoutuBot</title>
-    <link rel="shortcut icon" href="./static/images/avocado.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"
-        integrity="sha384-3LK/3kTpDE/Pkp8gTNp2gR/2gOiwQ6QaO7Td0zV76UFJVhqLl4Vl3KL1We6q6wR9"
-        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='stylesheets/seasoning_style.css') }}">
 </head>
-
 <body>
-    <div class="wrapper">
-        <header>
-            <div class="logo">
-                <h1> YoutuBot </h1>
+    <div class="chatbot-container">
+        <div class="chatbot-header">
+            <h1>YoutuBot</h1>
+        </div>
+        <div class="chatbot-messages">
+            <div class="chatbot-message">
+                <p>Hello, I am YoutuBot.</p>
             </div>
-        </header>
-        <section class="main-container">
-            <div class="location" id="home">
-                <br>
-                <br>
-                <h2 size="6">Hello, I am YoutuBot.<br></h2>
-                <form method="post" action="/""">
+            <div class="chatbot-message">
+                <p>You should try these songs:</p>
+                <ul>
+                    {% for title in recommends %}
+                    <li>{{ title }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="chatbot-input">
+                <form method="post" action="/">
                     <select name="music_request" id="music" multiple>
                         {% for key,value in musics.items() %}
-                            <option value="{{key}}">
-                                {{ value }}
-                            </option>
+                        <option value="{{key}}">{{ value }}</option>
                         {% endfor %}
                     </select>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <input type="submit" id="onboarding_submit" value="DISCOVER">
-                </form>                
-                <br>
-                <br>
-                <h2 id="people">You should try these songs : </h2>
-                {% if recommends|length > 0 %}
-                <ul>
-                    {% for title in recommends %} 
-                        <li>{{ title }}</li> 
-                    {% endfor %} 
-                </ul>
-                {% endif %}
+                    <input type="submit" value="Discover">
+                </form>
             </div>
-            <h4>Do you want to discover something else ?<br><br> </h4>
-            <form method="post" action="/""">
-            <button type="radio" name="recommend-again" value="yes" checked>Yes<br>
-            </form>
-            </div>
+        </div>
     </div>
-
 </body>
-
 </html>
