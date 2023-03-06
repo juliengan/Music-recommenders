@@ -46,6 +46,7 @@ def recommend(music_input=None):
         music_req_l = request.form.getlist("music_request")
         music_input = int(music_req_l[0]) if music_req_l else 0 
         nns_index = annoy_index.get_nns_by_item(music_input, 10)
+        print(music_req_l)
         recommends = []
         for index in nns_index:
             if type(ytb_df[index]) != list:

@@ -32,7 +32,7 @@
                     <select name="music_request" id="music" multiple>
                         {% for key,value in musics.items() %}
                             <option value="{{key}}">
-                                Music {{ key }} of genres: {{ value }}
+                                {{ value }}
                             </option>
                         {% endfor %}
                     </select>
