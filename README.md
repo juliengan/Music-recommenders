@@ -14,7 +14,6 @@ Project Organization
     ├── notebooks          
     │
     ├── requirements.txt  
-    │                         
     │
     ├── src                
     │   ├── features       <- Scripts to turn raw data into features for modeling

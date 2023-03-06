@@ -44,7 +44,31 @@
                     <br>
                     <input type="submit" id="onboarding_submit" value="DISCOVER">
                 </form>                
+                <br>
+                <br>
+                <h2 id="people">Hum, you would love this playlist then ! </h2>
+                <p>Go to youbute listen https://www.youtube.com/watch?v={video_id}</p>
+                <h1>Playlist based on music {{music_input}}</h1> 
+                <table border="1px"> 
+                    <tr> 
+                        {% for data in playlist %} 
+                            <th>{{ data }}</th> 
+                        {% endfor %} 
                 
+                        {% for _, record in playlist.iterrows() %} 
+                            <tr> 
+                                {% for value in record %} 
+                                    <td>{{ value }}</td> 
+                                {% endfor %} 
+                            </tr> 
+                        {% endfor %} 
+                    </tr> 
+                </table> 
+            </div>
+            <h4>Do you want to discover something else ?<br><br> </h4>
+            <form method="post" action="/""">
+            <button type="radio" name="recommend-again" value="yes" checked>Yes<br>
+            </form>
             </div>
     </div>
 
