@@ -1,6 +1,3 @@
-!pip3 install --no-cache-dir annoy
-!pip3 install -r '../requirements.txt'
-
 import json
 from ast import literal_eval
 import pandas as pd

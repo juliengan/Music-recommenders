@@ -53,8 +53,9 @@ def recommend():
         return render_template("request.html")
 
 def extract_entity(nlp_data):
+    """get the best entity from Wit AI (music with highest confidence AND confidence>0.5)
+    """
     if nlp_data['entities']: 
-        # get the best entity (movie with highest confidence AND confidence>0.5)
         entity_list = []
         currconf = 0.5
         for entity_body in nlp_data['entities'].values():
