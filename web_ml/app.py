@@ -45,68 +45,12 @@ stop_words = stopwords.words('english')
 
 
 @app.route('/', methods=["GET", "POST"])
-def recommend(music_input=None):
+def recommend():
     """ Use the nearest neighbors of the music liked by the user by using ANNOY. Rule-based chatbot (either recommends music by genre or from a particular artist.)
     Choose a music (among the 2070) based on the genres you like:
     """
     if request.method == "GET" or request.method == "POST":
-        user_input = request.form.get("user_input")
-        if user_input is None:
-            user_input = 'Hello'
-        
-        tokens = word_tokenize(user_input)
-        filtered_tokens = [token for token in tokens if token.lower() not in stopwords.words('english')]
-        stemmer = PorterStemmer()
-        stemmed_tokens = [stemmer.stem(token) for token in filtered_tokens]
-        lemmatizer = WordNetLemmatizer()
-        lemmatized_tokens = [lemmatizer.lemmatize(token) for token in filtered_tokens]
-        print("lemmatized user input:", lemmatized_tokens)
-        
-        musics = {}
-        for index in range(len(music_dataset[:1000])):
-            sample = music_dataset[index]
-            music_labels = [music_dict[idx] for idx in sample['label']]
-            musics[index] = [string.lower() for string in music_labels] 
-
-        # get all genres and filter lemmatized_tokens
-        all_genres = musics.items()
-        genres = []
-        for genre_list in all_genres:
-            genres.extend(genre_list[1])
-        genres = list(set(genres))
-        lowered_genres = [string.lower() for string in genres]
-        print("YoutuBot is based on the following genres",lowered_genres)
-        filtered_input = []
-
-        # Retrieve genre searched by the user
-        for word in lemmatized_tokens:
-            for genre in lowered_genres:
-                if word in genre:
-                    filtered_input.append(word)
-
-        if len(filtered_input) > 0:
-            associated_musics = []
-            for k,v in musics.items():
-                associated_musics.append({k: v for w in v if filtered_input[0] in w})
-
-            # Retrieve musics of that genre
-            associated_musics = [d for d in associated_musics if d]
-            first_value = next(iter(associated_musics[0].keys()))
-        else:
-            first_value = 0
-
-        print(first_value)
-        with open("data/musics/ytb_musics_dict", "r") as f:
-            ytb_musics_dict = json.load(f)
-        ytb_df = pd.Series(ytb_musics_dict)
-        #music_req_l = request.form.getlist("music_request")
-        #music_input = int(music_req_l[0]) if music_req_l else 0 
-        nns_index = annoy_index.get_nns_by_item(first_value, 10)
-        recommends = []
-        for index in nns_index:
-            if type(ytb_df[index]) != list:
-                recommends.append(ytb_df[index])
-        return render_template("request.html", recommends =recommends, musics = musics, user_input=user_input)
+        return render_template("request.html")
 
 def extract_entity(nlp_data):
     if nlp_data['entities']: 
