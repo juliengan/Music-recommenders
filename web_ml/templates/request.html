@@ -20,36 +20,13 @@
             <div class="chatbot-message">
                 <p>Hello, I am YoutuBot. How can I help you ?</p>
             </div>
-            <div class="chatbot-messages">
-
-            </div>
+        
             <form method="post" action="/chat" id="chat-form">
                 <div class="user-message">
                     <input type="text" name="user_input" id="user-input" placeholder="Type your message here">
                     <button type="submit" class="user-send-button">Send</button>
                 </div>
             </form>
-            <div class="chatbot-input">
-                <form method="post" action="/">
-                    <select name="music_request" id="music" multiple>
-                        {% for key, value in musics.items() %}
-                        {% set genres = value|join(', ') %}
-                        <option id="choose" value="{{ key }}">
-                            {{ key }} | Genres: {{ genres }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                    <input id="onboarding_submit" type="submit" value="Discover">
-                </form>
-            </div>
-            <div class="chatbot-message">
-                <p>You should try these songs:</p>
-                <ul>
-                    {% for title in recommends %}
-                    <li>{{ title }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
         </div>
     </div>
     </div>
