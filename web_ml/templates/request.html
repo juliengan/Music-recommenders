@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="chatbot-messages">
-            <div class="chatbot-message">
+            <div class="chatbot-message" id="conv">
                 <p>Hello, I am YoutuBot. How can I help you ?</p>
             </div>
         
@@ -53,12 +53,14 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
+                    data.reverse()
                     // Update the messages on the page
-                    const chatbotMessages = document.querySelector('.chatbot-messages');
+                    const chatbotMessages = document.getElementById('conv');
                     for (let d of data) {
+                        console.log(data)
                         const message = d.text;
                         const sender = d.sender;
-                        chatbotMessages.insertAdjacentHTML('afterbegin', `
+                        chatbotMessages.insertAdjacentHTML('beforeend', `
             <div class="${sender}-message">
                 <p>${message}</p>
             </div>
